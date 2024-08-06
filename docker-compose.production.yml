@@ -14,9 +14,9 @@ services:
   
   frontend:
     image: spy02/foodgram_frontend
-    command: cp -r /app/result_build/. /app/frontend_static
     volumes:
       - static:/app/frontend_static
+    command: cp -r /app/result_build/. /app/frontend_static
 
   backend:
     image: spy02/foodgram_backend
