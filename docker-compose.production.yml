@@ -29,7 +29,7 @@ services:
       - media:/app/media/
 
   nginx:
-    image: spy02/foodgram-gateway
+    image: spy02/foodgram_gateway
     env_file: .env
     volumes:
       - static:/web
