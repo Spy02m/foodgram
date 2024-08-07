@@ -1,5 +1,4 @@
 import os
-import requests
 
 from django.db.models import F, Sum
 from django.contrib.auth import get_user_model
