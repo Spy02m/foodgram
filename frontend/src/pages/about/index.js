@@ -41,7 +41,7 @@ const About = ({ updateOrders, orders }) => {
               Код проекта находится тут - <a href="https://github.com/Spy02m/foodgram" className={styles.textLink}>Github</a>
             </p>
             <p className={styles.textItem}>
-              Автор проекта: <a href="#" className={styles.textLink}>Сергей Баданов</a>
+              Автор проекта: <a href="https://github.com/Spy02m/" className={styles.textLink}>Сергей Баданов</a>
             </p>
           </div>
         </aside>
