@@ -6,10 +6,9 @@
  - Проект состоит из бэкенд-приложения на Django и фронтенд-приложения на React.
 
 [Ссылка на развернутый проект](https://foodgram.serveminecraft.net/)
-
 #### Данные для входа в админ-зону:
-Email: admin@admin.com
-Пароль: admin123
+ - Email: `admin@admin.com`
+ - Пароль: `admin123`
 
 ## Технологии
  - Python
