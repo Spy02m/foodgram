@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
+    'urlshortner',
     'recipes.apps.RecipesConfig',
     'api.apps.ApiConfig',
 ]
