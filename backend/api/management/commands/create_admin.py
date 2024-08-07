@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = 'Команда создает суперпользователя'
 
     def handle(self, *args, **options):
-        if User.objects.count() == 0:
+        if not User.objects.filter(username='admin').exists():
             User.objects.create_superuser(
                 email='admin@admin.com',
                 username='admin',
@@ -17,5 +17,4 @@ class Command(BaseCommand):
                 last_name='admin')
             print('Суперпользователь успешно создан')
         else:
-            print('Аккаунт администратора может быть создан, '
-                  'если нет других учетных записей')
+            print('Аккаунт администратора уже создан')
