@@ -13,13 +13,13 @@ services:
       - pg_data:/var/lib/postgresql/data
   
   frontend:
-    image: spy02/foodgram_frontend
+    build: ./frontend/
     volumes:
       - static:/app/frontend_static
     command: cp -r /app/build/. /app/frontend_static
 
   backend:
-    image: spy02/foodgram_backend
+    build: ./backend/
     env_file: .env
     depends_on:
       - db
@@ -29,7 +29,7 @@ services:
       - media:/app/media/
 
   nginx:
-    image: spy02/foodgram_gateway
+    build: ./infra/
     env_file: .env
     volumes:
       - static:/web
