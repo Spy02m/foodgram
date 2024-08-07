@@ -9,7 +9,6 @@ from djoser.views import UserViewSet
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from urlshortner.utils import shorten_url
 
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingList, Subscribe, Tag)
@@ -110,8 +109,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(detail=True, url_path='get-link')
     def get_link(self, request, pk=None):
         url = request.build_absolute_uri(f'/recipes/{pk}/')
-        url_route = shorten_url(url, is_permanent=False)
-        short_url = request.build_absolute_uri(f'/s/{url_route}')
+        short_url = request.build_absolute_uri(f'/s/{url}')
         return Response({'short-link': short_url})
 
     def __recipe(self, request, model, serializer_class, pk=None):
