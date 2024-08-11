@@ -1,4 +1,3 @@
-from typing import Iterable
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, RegexValidator
