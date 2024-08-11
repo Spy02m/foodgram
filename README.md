@@ -91,6 +91,11 @@ SSH_KEY
 SSH_PASSPHRASE
 TELEGRAM_TO
 TELEGRAM_TOKEN
+DJANGO_ADMIN_USERNAME
+DJANGO_ADMIN_PASSWORD
+DJANGO_ADMIN_EMAIL
+DJANGO_ADMIN_FIRST_NAME
+DJANGO_ADMIN_LAST_NAME
 ```
  - Изменить файл `.github/workflows/main.yml` под свои параметры
  - Отправить изменения в свой репозиторий
