@@ -5,7 +5,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from recipes.constants import MIN_VALUE_AMOUNT
-from recipes.models import (BaseFavoriteAndShoppingList, Favorite, Ingredient, Recipe, RecipeIngredient,
+from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingList, Subscribe, Tag)
 
 User = get_user_model()
