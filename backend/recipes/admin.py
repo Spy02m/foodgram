@@ -55,7 +55,8 @@ class PageFormSet(BaseInlineFormSet):
 
     def clean(self):
         super(PageFormSet, self).clean()
-        if all(form.cleaned_data.get('DELETE') for form in self.forms):
+        if all(form.cleaned_data.get('DELETE')
+               for form in self.forms if form.cleaned_data):
             raise ValidationError('Не бывает рецепта без ингредиентов')
 
 
