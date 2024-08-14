@@ -61,7 +61,7 @@ class PageFormSet(BaseInlineFormSet):
 
 class RecipeIngredientInline(admin.TabularInline):
     model = RecipeIngredient
-    extra = 1
+    extra = 0
     formset = PageFormSet
 
 
