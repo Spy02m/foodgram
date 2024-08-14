@@ -38,16 +38,15 @@ class UserDjoserViewSet(UserViewSet):
             permission_classes=[permissions.IsAuthenticated],
             url_path='me/avatar')
     def avatar(self, request):
-        user = request.user
         if request.method == 'PUT':
-            serializer = AvatarSerializer(user, data=request.data)
+            serializer = AvatarSerializer(request.user, data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
-        if user.avatar:
-            os.remove(user.avatar.path)
-            user.avatar = None
-            user.save()
+        if request.user.avatar:
+            os.remove(request.user.avatar.path)
+            request.user.avatar = None
+            request.user.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({'errors': 'У вас нет аватара'},
                         status=status.HTTP_400_BAD_REQUEST)
@@ -113,20 +112,15 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def __add_or_delete_recipe(
             self, request, model, serializer_class, model_text, pk=None):
-        user = request.user
         recipe = get_object_or_404(Recipe, pk=pk)
         if request.method == 'POST':
-            if model.objects.filter(user=user, recipe=recipe).exists():
-                return Response(
-                    {'errors': f'Рецепт уже добавлен в {model_text}'},
-                    status=status.HTTP_400_BAD_REQUEST)
             serializer = serializer_class(
-                data={'user': user.pk, 'recipe': recipe.pk})
+                data={'user': request.user.pk, 'recipe': recipe.pk})
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        if model.objects.filter(user=user, recipe=recipe).exists():
-            model.objects.filter(user=user, recipe=recipe).delete()
+        if model.objects.filter(user=request.user, recipe=recipe).exists():
+            model.objects.filter(user=request.user, recipe=recipe).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({'errors': f'Рецепт не был добавлен в {model_text}'},
                         status=status.HTTP_400_BAD_REQUEST)

@@ -5,7 +5,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from recipes.constants import MIN_VALUE_AMOUNT
-from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
+from recipes.models import (BaseFavoriteAndShoppingList, Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingList, Subscribe, Tag)
 
 User = get_user_model()
@@ -194,10 +194,9 @@ class SubscribeUserSerializer(UserGetSerializer):
     def get_recipes(self, obj):
         request = self.context.get('request')
         recipes_limit = request.query_params.get('recipes_limit')
+        recipes = obj.recipes.all()
         if recipes_limit and recipes_limit.isdigit():
             recipes = obj.recipes.all()[:int(recipes_limit)]
-        else:
-            recipes = obj.recipes.all()
         return CutRecipeSerializer(recipes, many=True).data
 
 
@@ -223,16 +222,20 @@ class SubscribeSerializer(serializers.ModelSerializer):
             instance.author, context={'request': request}).data
 
 
-class ShoppingListSerializer(serializers.ModelSerializer):
-    """Сериализатор списка покупок."""
+class BaseFavoriteAndShoppingListSerializer(serializers.ModelSerializer):
+    """Базовый сериализатор для избранного и списка покупок."""
 
     class Meta:
-        model = ShoppingList
         fields = ('user', 'recipe')
-        validators = [
-            UniqueTogetherValidator(
-                queryset=ShoppingList.objects.all(),
-                fields=('user', 'recipe'))]
+
+    def validate(self, attrs):
+        model_class = self.Meta.model
+        if model_class.objects.filter(
+           user=attrs['user'], recipe=attrs['recipe']).exists():
+            raise serializers.ValidationError(
+                f'Рецепт уже добавлен в {model_class.__name__.lower()}'
+            )
+        return attrs
 
     def to_representation(self, instance):
         request = self.context.get('request')
@@ -240,13 +243,15 @@ class ShoppingListSerializer(serializers.ModelSerializer):
             instance.recipe, context={'request': request}).data
 
 
-class FavoriteSerializer(ShoppingListSerializer):
+class ShoppingListSerializer(BaseFavoriteAndShoppingListSerializer):
+    """Сериализатор списка покупок."""
+
+    class Meta(BaseFavoriteAndShoppingListSerializer.Meta):
+        model = ShoppingList
+
+
+class FavoriteSerializer(BaseFavoriteAndShoppingListSerializer):
     """Сериализатор избранного."""
 
-    class Meta:
+    class Meta(BaseFavoriteAndShoppingListSerializer.Meta):
         model = Favorite
-        fields = ('user', 'recipe')
-        validators = [
-            UniqueTogetherValidator(
-                queryset=Favorite.objects.all(),
-                fields=('user', 'recipe'))]

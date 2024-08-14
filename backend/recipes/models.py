@@ -200,15 +200,15 @@ class Subscribe(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'author'],
-                name='unique_user_author')]
+                name='unique_user_author'),]
 
     def __str__(self):
         return f'{self.user} подписан на {self.author}'
 
-    def save(self, *args, **kwargs):
+    def clean(self):
         if self.user == self.author:
             raise ValidationError('Нельзя подписаться на самого себя')
-        super().save(*args, **kwargs)
+        super().clean()
 
 
 class BaseFavoriteAndShoppingList(models.Model):
